@@ -1,0 +1,102 @@
+//qrcode.html
+<!DOCTYPE html>
+<!-- Declares the document type as HTML5 -->
+<html lang="en">
+<!-- Starts the HTML document and sets the language to English -->
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Sets the character encoding to UTF-8 (supports all characters) -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Makes the page responsive on mobile devices by setting the viewport -->
+
+    <title>QR code</title>
+    <!-- Sets the title of the page (shown in browser tab) -->
+
+    <link rel="stylesheet" href="qrcode.css">
+    <!-- Links an external CSS file named qrcode.css for styling -->
+</head>
+
+<body>
+    <!-- Main content of the page starts here -->
+
+    <div class="container">
+        <!-- A container div to group all elements and apply styling -->
+
+        <p>Enter your text or URL</p>
+        <!-- A paragraph prompting the user to enter input -->
+
+        <input type="text" placeholder="Text or URL" id="qrText">
+        <!-- Input field where the user types the text or URL to convert into a QR code -->
+        <!-- The id="qrText" is used to access this element in JavaScript -->
+
+        <div id="imgBox">
+            <!-- A div that will hold the QR code image -->
+            <!-- The id="imgBox" is used to show/hide or style this container -->
+
+            <img src="" id="qrImage">
+            <!-- The <img> tag where the generated QR code will be displayed -->
+            <!-- Initially empty; the src will be set dynamically via JavaScript -->
+        </div>
+
+        <button onclick="generateQR()">Generate QR code</button>
+        <!-- A button that triggers the generateQR() function when clicked -->
+        <!-- This function is defined in the external JavaScript file -->
+    </div>
+
+    <script src="qrcode.js"></script>
+    <!-- Links an external JavaScript file named qrcode.js -->
+    <!-- This file contains the logic to generate the QR code -->
+</body>
+</html>
+
+
+
+
+//qrcode.js
+
+// Get the DOM element with id="imgBox" and store it in the variable imgBox
+// This is the container that will hold the QR image
+let imgBox = document.getElementById("imgBox");
+
+// Get the DOM element with id="qrImage" and store it in qrImage
+// This is the <img> tag where the QR code will be displayed
+let qrImage = document.getElementById("qrImage");
+
+// Get the DOM element with id="qrText" and store it in qrText
+// This is the input field where the user types the text to be converted into a QR code
+let qrText = document.getElementById("qrText");
+
+// Define a function named generateQR
+// This function will be called when the user clicks the "Generate QR" button
+function generateQR() {
+
+    // Check if the input field is not empty
+    // If the user has typed something, proceed to generate the QR code
+    if (qrText.value.length > 0) {
+
+        // Set the src attribute of the qrImage <img> element
+        // This uses an external API to generate a QR code image
+        // The API URL includes the size and the encoded user input
+        qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" 
+                      + encodeURIComponent(qrText.value);
+
+        // Add the class "show-img" to the imgBox container
+        // This class likely makes the QR image visible or applies animation
+        imgBox.classList.add("show-img");
+
+    } else {
+        // If the input field is empty, show an error
+
+        // Add the class "error" to the input field
+        // This class might apply a red border or shake animation to indicate invalid input
+        qrText.classList.add('error');
+
+        // Use setTimeout to remove the "error" class after 1 second (1000 milliseconds)
+        // This makes the error effect temporary
+        setTimeout(() => {
+            qrText.classList.remove('error');
+        }, 1000);
+    }
+}
